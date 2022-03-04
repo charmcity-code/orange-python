@@ -131,10 +131,11 @@ def main():
             mileage = line[3]
             price = line[4]
             features = line[5:]
-            new_car = Car(make, model, vin, mileage, price, features)
+            new_car = Car(make, model, vin, mileage, price, ", ".join(features))
             new_car.add_car()
         textfile.close()
         print("\nInventory data loaded.")
+        Car.display_inventory()
         continue_program()
 
     elif input_option == 7:
