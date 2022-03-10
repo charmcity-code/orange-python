@@ -77,7 +77,7 @@ def main():
         input_option = int(input("Please select an option: "))
     except ValueError:
         print("\nPlease enter a valid number.")
-        continue_program()
+        input_option = int(input("Please select an option: "))
 
     if input_option == 1:
         print("\nAdd a car")
@@ -175,7 +175,7 @@ def main():
 
     else:
         print("\nPlease enter a valid number.")
-        continue_program()
+        main()
 
 
 def continue_program():
