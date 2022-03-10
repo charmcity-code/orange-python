@@ -1,7 +1,23 @@
-# For this assignment, you will be modifying the used car dealer application from last week. There will be no code file provided for this assignment, you will be working from the previous week’s project files.
-# !!VERSION CONTROL!!: Be sure to make a backup copy of your project folder before you begin work on this assignment.
-# This week, you will be modifying your application to add two new menu items: Save Data, Load Data. The Save Data option will write the current vehicle data to a text file, overwriting any existing data. Load data will open the specified text file and read in the vehicle data into memory.
-# Once you have the desired functionality, you will take screenshots of your program executing and the contents of your text file in order to demonstrate your program is able to save and load data to and from the text file. Paste your screenshots into a Word doc along with your completed code.
+# Part 1
+# Using the car dealer application, you will need to implement at least three basic exception handling methods that check for and handle the following exception types:
+# NaN (Not a Number)
+# FileNotFound
+# FileIsEmpty
+
+# Part 2
+# The second part of this assignment will require that you choose a feature/function from the provided list to plan for and implement into your application.
+# Feature Options:
+# Generate formatted report to the console.
+# Outputs a formatted full-page report to a file.
+
+# Utilize MySQL Database to store vehicle data.
+# *WARNING* attempt this option ONLY if you have prior experience with databases as this can be challenging for first-timers and you may run out of time to complete the project.
+# Research installing the mysql.connector for python, there are multiple PIP commands so make sure to research the one for your version of python.
+
+# Incorporate colored text.
+# Colorize the menu and outputs
+
+import os
 
 
 class Car:
@@ -56,7 +72,13 @@ def main():
     print("6. Load inventory data")
     print("7. Exit")
 
-    input_option = int(input("Please select an option: "))
+    # add exception handling for invalid input (nan)
+    try:
+        input_option = int(input("Please select an option: "))
+    except ValueError:
+        print("\nPlease enter a valid number.")
+        continue_program()
+
     if input_option == 1:
         print("\nAdd a car")
         print("================")
@@ -122,30 +144,45 @@ def main():
         continue_program()
 
     elif input_option == 6:
-        textfile = open("inventory.txt", "r")
-        for line in textfile:
-            line = line.strip().split(", ")
-            make = line[0]
-            model = line[1]
-            vin = line[2]
-            mileage = line[3]
-            price = line[4]
-            features = line[5:]
-            new_car = Car(make, model, vin, mileage, price, ", ".join(features))
-            new_car.add_car()
-        textfile.close()
-        print("\nInventory data loaded.")
-        Car.display_inventory()
-        continue_program()
+        # add exeption handling for file not found
+        try:
+            textfile = open("inventory.txt", "r")
+
+            # add exeption handling for file is empty
+            if os.path.getsize("inventory.txt") == 0:
+                print("\nFile is empty.")
+                continue_program()
+            for line in textfile:
+                line = line.strip().split(", ")
+                make = line[0]
+                model = line[1]
+                vin = line[2]
+                mileage = line[3]
+                price = line[4]
+                features = line[5:]
+                new_car = Car(make, model, vin, mileage, price, ", ".join(features))
+                new_car.add_car()
+            textfile.close()
+            print("\nInventory data loaded.")
+            Car.display_inventory()
+            continue_program()
+        except FileNotFoundError:
+            print("\nFile not found.")
+            continue_program()
 
     elif input_option == 7:
         print("Exiting...")
+
+    else:
+        print("\nPlease enter a valid number.")
+        continue_program()
 
 
 def continue_program():
     continue_option = input("\nPress any key to continue or 'q' to quit: ")
     if continue_option == "q":
         print("Exiting...")
+        quit()
     else:
         main()
 
